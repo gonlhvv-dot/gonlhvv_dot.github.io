@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Happy Birthday J</title>
-  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
   <style>
@@ -28,9 +26,9 @@
       z-index: 2;
     }
 
-    #heart {
-      width: 180px;
-      height: 180px;
+    #cake {
+      width: 200px;
+      height: auto;
       cursor: pointer;
     }
 
@@ -67,113 +65,119 @@
       transform: translateX(-50%);
       bottom: -40px;
     }
+
+    .flame {
+      fill: orange;
+      transition: opacity 0.5s ease;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <svg id="heart" viewBox="0 0 512 512">
-      <path fill="#ffb6c1" d="M256 464s-192-112-192-272C64 104 144 64 256 160 368 64 448 104 448 192c0 160-192 272-192 272z"/>
+    <!-- เค้ก SVG -->
+    <svg id="cake" viewBox="0 0 200 200">
+      <!-- ฐานเค้ก -->
+      <rect x="50" y="100" width="100" height="60" rx="10" fill="#ffb6c1"/>
+      <!-- ชั้นบน -->
+      <rect x="60" y="80" width="80" height="30" rx="8" fill="#ffc0cb"/>
+      <!-- เทียน -->
+      <rect x="95" y="50" width="10" height="30" fill="#87cefa"/>
+      <!-- เปลวไฟ -->
+      <circle id="flame" class="flame" cx="100" cy="45" r="6"/>
     </svg>
-    <div id="message">Happy Birthday, J! 🎉</div>
-    <div class="subtitle">Wishing you a day full of sparkle and joy ✨</div>
+
+    <div id="message">สุขสันต์วันเกิด J! 🎉</div>
+    <div class="subtitle">ขอให้วันนี้เต็มไปด้วยความสุขและรอยยิ้ม ✨</div>
   </div>
 
   <script>
-    const heart = document.getElementById("heart");
-    const message = document.getElementById("message");
-    const tl = new TimelineMax({ repeat: -1, yoyo: true });
+  const cake = document.getElementById("cake");
+  const flame = document.getElementById("flame");
+  const message = document.getElementById("message");
 
-    // Heart beat animation
-    tl.to(heart, 0.6, {
-      scale: 1.1,
-      transformOrigin: "center center",
-      ease: Power1.easeInOut
-    }).to(heart, 0.6, {
-      scale: 1,
-      ease: Power1.easeInOut
-    });
+  let clickCount = 0;
+  const maxClicks = 3; // ต้องคลิก 3 ครั้งถึงจะดับเทียน
 
-    // Create balloons with animated strings
-function createBalloons(count) {
-  for (let i = 0; i < count; i++) {
-    const balloon = document.createElement("div");
-    balloon.classList.add("balloon");
+  function createBalloons(count) {
+    for (let i = 0; i < count; i++) {
+      const balloon = document.createElement("div");
+      balloon.classList.add("balloon");
 
-    const colors = ["#ffb6c1", "#ffd700", "#87cefa", "#98fb98", "#dda0dd", "#ff69b4"];
-    balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      const colors = ["#ffb6c1", "#ffd700", "#87cefa", "#98fb98", "#dda0dd", "#ff69b4"];
+      balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
 
-    const left = Math.random() * window.innerWidth;
-    balloon.style.left = `${left}px`;
-    balloon.style.bottom = `-60px`;
+      const left = Math.random() * window.innerWidth;
+      balloon.style.left = `${left}px`;
+      balloon.style.bottom = `-60px`;
 
-    const string = document.createElement("div");
-    string.classList.add("string");
-    balloon.appendChild(string);
+      const string = document.createElement("div");
+      string.classList.add("string");
+      balloon.appendChild(string);
 
-    document.body.appendChild(balloon);
+      document.body.appendChild(balloon);
 
-    // Fade in
-    TweenMax.to(balloon, 0.8, {
-      opacity: 1,
-      ease: Power2.easeOut
-    });
+      TweenMax.to(balloon, 0.8, { opacity: 1, ease: Power2.easeOut });
+      TweenMax.to(balloon, 6, {
+        bottom: window.innerHeight + 100,
+        ease: Power1.easeInOut,
+        delay: Math.random() * 1.5,
+        onComplete: () => balloon.remove()
+      });
 
-    // Float upward with slight wobble and random delay
-    TweenMax.to(balloon, 6, {
-      bottom: window.innerHeight + 100,
-      ease: Power1.easeInOut,
-      delay: Math.random() * 1.5,
-      onComplete: () => balloon.remove()
-    });
+      TweenMax.to(balloon, 2, {
+        x: Math.random() > 0.5 ? 15 : -15,
+        repeat: -1,
+        yoyo: true,
+        ease: Sine.easeInOut
+      });
 
-    // Balloon Sway (random horizontal movement for more realism)
-    TweenMax.to(balloon, 2, {
-      x: Math.random() > 0.5 ? 15 : -15, // Slight horizontal sway
-      repeat: -1,
-      yoyo: true,
-      ease: Sine.easeInOut
-    });
+      TweenMax.to(balloon, 3, {
+        rotation: Math.random() * 10,
+        repeat: -1,
+        yoyo: true,
+        ease: Sine.easeInOut
+      });
 
-    // Balloon rotation (rotate the balloon to simulate wind)
-    TweenMax.to(balloon, 3, {
-      rotation: Math.random() * 10, // Random rotation for realism
-      repeat: -1,
-      yoyo: true,
-      ease: Sine.easeInOut
-    });
+      TweenMax.to(balloon, 3, {
+        scale: 1.05,
+        repeat: -1,
+        yoyo: true,
+        ease: Sine.easeInOut
+      });
 
-    // Balloon scale (simulate inflation and deflation)
-    TweenMax.to(balloon, 3, {
-      scale: 1.05,
-      repeat: -1,
-      yoyo: true,
-      ease: Sine.easeInOut
-    });
-
-    // String sway (horizontal + vertical sway for the string)
-    TweenMax.to(string, 1.5, {
-      rotation: Math.random() * 10, // Random rotation of the string
-      transformOrigin: "top center",
-      repeat: -1,
-      yoyo: true,
-      ease: Sine.easeInOut,
-      y: Math.random() * 10, // Slight up-and-down movement
-      x: Math.random() * 10 // Slight horizontal movement
-    });
+      TweenMax.to(string, 1.5, {
+        rotation: Math.random() * 10,
+        transformOrigin: "top center",
+        repeat: -1,
+        yoyo: true,
+        ease: Sine.easeInOut,
+        y: Math.random() * 10,
+        x: Math.random() * 10
+      });
+    }
   }
-}
 
+  cake.addEventListener("click", () => {
+    clickCount++;
 
-    // Click to show message and balloons
-    heart.addEventListener("click", () => {
+    if (clickCount >= maxClicks) {
+      flame.style.opacity = 0; // ดับเปลวไฟ
       TweenMax.to(message, 1, {
         opacity: 1,
         scale: 1,
         ease: Elastic.easeOut.config(1, 0.4)
       });
-
       createBalloons(25);
-    });
-  </script>
+    } else {
+      // เอฟเฟกต์เล็กๆระหว่างคลิก เช่น สั่นเค้ก
+      TweenMax.to(cake, 0.2, {
+        scale: 1.05,
+        yoyo: true,
+        repeat: 1,
+        ease: Power1.easeInOut
+      });
+    }
+  });
+</script>
 </body>
 </html>
