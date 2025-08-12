@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday J</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      font-family: 'Quicksand', sans-serif;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .container {
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    #cake {
+      width: 200px;
+      height: auto;
+      cursor: pointer;
+    }
+
+    #message {
+      margin-top: 30px;
+      font-size: 2.5rem;
+      color: #ff6fae;
+      font-family: 'Pacifico', cursive;
+      opacity: 0;
+      transform: scale(0.8);
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: #888;
+      margin-top: 10px;
+    }
+
+    .balloon {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      opacity: 0;
+      z-index: 1;
+    }
+
+    .string {
+      position: absolute;
+      width: 2px;
+      height: 40px;
+      background-color: #aaa;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: -40px;
+    }
+
+    .flame {
+      fill: orange;
+      transition: opacity 0.5s ease;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- เค้ก SVG -->
+    <svg id="cake" viewBox="0 0 200 200">
+      <!-- ฐานเค้ก -->
+      <rect x="50" y="100" width="100" height="60" rx="10" fill="#ffb6c1"/>
+      <!-- ชั้นบน -->
+      <rect x="60" y="80" width="80" height="30" rx="8" fill="#ffc0cb"/>
+      <!-- เทียน -->
+      <rect x="95" y="50" width="10" height="30" fill="#87cefa"/>
+      <!-- เปลวไฟ -->
+      <circle id="flame" class="flame" cx="100" cy="45" r="6"/>
+    </svg>
+
+    <div id="message">สุขสันต์วันเกิด J! 🎉</div>
+    <div class="subtitle">ขอให้วันนี้เต็มไปด้วยความสุขและรอยยิ้ม ✨</div>
+  </div>
+
+  <script>
+  const cake = document.getElementById("cake");
+  const flame = document.getElementById("flame");
+  const message = document.getElementById("message");
+
+  let clickCount = 0;
+  const maxClicks = 3; // ต้องคลิก 3 ครั้งถึงจะดับเทียน
+
+  function createBalloons(count) {
+    for (let i = 0; i < count; i++) {
+      const balloon = document.createElement("div");
+      balloon.classList.add("balloon");
+
+      const colors = ["#ffb6c1", "#ffd700", "#87cefa", "#98fb98", "#dda0dd", "#ff69b4"];
+      balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+      const left = Math.random() * window.innerWidth;
+      balloon.style.left = `${left}px`;
+      balloon.style.bottom = `-60px`;
+
+      const string = document.createElement("div");
+      string.classList.add("string");
+      balloon.appendChild(string);
+
+      document.body.appendChild(balloon);
+
+      TweenMax.to(balloon, 0.8, { opacity: 1, ease: Power2.easeOut });
+      TweenMax.to(balloon, 6, {
+        bottom: window.innerHeight + 100,
+        ease: Power1.easeInOut,
+        delay: Math.random() * 1.5,
+        onComplete: () => balloon.remove()
+      });
+
+      TweenMax.to(balloon, 2, {
+        x: Math.random() > 0.5 ? 15 : -15,
+        repeat: -1,
+        yoyo: true,
+        ease: Sine.easeInOut
+      });
+
+      TweenMax.to(balloon, 3, {
+        rotation: Math.random() * 10,
+        repeat: -1,
+        yoyo: true,
+        ease: Sine.easeInOut
+      });
+
+      TweenMax.to(balloon, 3, {
+        scale: 1.05,
+        repeat: -1,
+        yoyo: true,
+        ease: Sine.easeInOut
+      });
+
+      TweenMax.to(string, 1.5, {
+        rotation: Math.random() * 10,
+        transformOrigin: "top center",
+        repeat: -1,
+        yoyo: true,
+        ease: Sine.easeInOut,
+        y: Math.random() * 10,
+        x: Math.random() * 10
+      });
+    }
+  }
+
+  cake.addEventListener("click", () => {
+    clickCount++;
+
+    if (clickCount >= maxClicks) {
+      flame.style.opacity = 0; // ดับเปลวไฟ
+      TweenMax.to(message, 1, {
+        opacity: 1,
+        scale: 1,
+        ease: Elastic.easeOut.config(1, 0.4)
+      });
+      createBalloons(25);
+    } else {
+      // เอฟเฟกต์เล็กๆระหว่างคลิก เช่น สั่นเค้ก
+      TweenMax.to(cake, 0.2, {
+        scale: 1.05,
+        yoyo: true,
+        repeat: 1,
+        ease: Power1.easeInOut
+      });
+    }
+  });
+</script>
+</body>
+</html>
