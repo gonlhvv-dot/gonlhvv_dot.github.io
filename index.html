@@ -42,11 +42,12 @@
     }
 
     .subtitle {
-      font-size: 1.2rem;
-      color: #888;
-      margin-top: 10px;
-    }
-
+    font-size: 1.2rem;
+    color: #888;
+    margin-top: 10px;
+    opacity: 0;
+    transform: translateY(10px);
+  }
     .balloon {
       position: absolute;
       width: 50px;
@@ -160,15 +161,27 @@
   cake.addEventListener("click", () => {
     clickCount++;
 
-    if (clickCount >= maxClicks) {
-      flame.style.opacity = 0; // ดับเปลวไฟ
-      TweenMax.to(message, 1, {
-        opacity: 1,
-        scale: 1,
-        ease: Elastic.easeOut.config(1, 0.4)
-      });
-      createBalloons(25);
-    } else {
+  if (clickCount >= maxClicks) {
+    flame.style.opacity = 0; // ดับเปลวไฟ
+
+    // แสดงข้อความอวยพร
+    TweenMax.to(message, 1, {
+    opacity: 1,
+    scale: 1,
+    ease: Elastic.easeOut.config(1, 0.4)
+  });
+
+    // แสดงคำบรรยายพร้อมกัน
+    const subtitle = document.querySelector(".subtitle");
+    TweenMax.to(subtitle, 1, {
+    opacity: 1,
+    y: -10,
+    ease: Power2.easeOut,
+    delay: 0.3
+  });
+
+  createBalloons(25);
+} else {
       // เอฟเฟกต์เล็กๆระหว่างคลิก เช่น สั่นเค้ก
       TweenMax.to(cake, 0.2, {
         scale: 1.05,
